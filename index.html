@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>URI Mimic Generator</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+  <div id="app">
+    <div class="ui grid container">
+      <div class="row">
+        <p>
+          This tool creates similar versions of the supplied text replacing
+          some characters with others that are much alike. The goal here
+          is to show that the font-family used in an application may
+          affect it's security.
+        </p>
+        <p>
+          If you're using Linux, please, make sure to install microsoft fonts. <br />
+          In Ubuntu/Debian, the package you'll need is <i>ttf-mscorefonts-installer</i>
+        </p>
+      </div>
+      <div class="row">
+        <form class="ui form">
+          <div class="field">
+            <label>First Name</label>
+            <input v-model='message' name="first-name" placeholder="type some URI here" type="text">
+          </div>
+        </form>
+      </div>
+
+      <div class="row">
+        <div class='sixteen wide mobile eight wide tablet four wide computer column' v-for='(value, key) in families'>
+          <p>
+            <strong :style="{'font-family': value}" title="font family name" v-text='key'></strong>
+          </p>
+          <ol>
+            <li v-for='msg in scramble(message)'>
+              <span :style="{'font-family': value}" v-text='msg'></span>
+            </li>
+          </ol>
+        </div><!-- list item -->
+      </div>
+
+    </div><!-- ui grid -->
+  </div>
+
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+
+  <script src="https://unpkg.com/vue"></script>
+  <script>
+    var chrMap = {
+      'i': ['l', '¡'],
+      'I': ['L', '¡'],
+      'o': ['0', 'º', '°'],
+      'O': ['O', '0'],
+      'x': ['x', '×'],
+      'B': ['ß'],
+      'p': ['þ']
+    };
+    var app = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          families: {
+            'verdana': 'Verdana, Geneva, sans-serif',
+            'courier new': '"Courier New", Courier, monospace',
+            'trebuchet': '"Trebuchet MS", Helvetica, sans-serif',
+            'comic sans': '"Comic Sans MS", cursive, sans-serif',
+            'arial': 'Arial, Helvetica, sans-serif',
+            'georgia': 'Georgia, serif',
+            'times new roman': '"Times New Roman", Times, serif'
+          },
+          message: 'Type your message'
+        }
+      },
+      methods: {
+        scramble: function (msg) {
+          var rs = ['[ ] ' + msg];
+          var chrKeys = Object.keys(chrMap);
+          var chr = null;
+          // for each mapped character
+          for (i=0; i<chrKeys.length; i++) {
+            var chr = chrKeys[i];
+            // if it is found in msg
+            if (msg.indexOf(chr) > -1) {
+              var mapped = chrMap[chr];
+              for (j=0; j<mapped.length; j++) {
+                rs.push('['+ mapped[j] +'] ' + msg.replace(chr, mapped[j]));
+              }
+            }
+          }
+          return rs;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
