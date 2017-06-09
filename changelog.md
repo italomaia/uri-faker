@@ -1,3 +1,8 @@
+**Version 0.2**
+
+* new chars
+* supported chars are now listed
+
 **Version 0.1**
 
 * supported characters:

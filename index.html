@@ -13,22 +13,27 @@
   <div id="app">
     <div class="ui grid container">
       <div class="row">
-        <p>
-          This tool creates similar versions of the supplied text replacing
-          some characters with others that are much alike. The goal here
-          is to show that the font-family used in an application may
-          affect it's security.
-        </p>
-        <p>
-          If you're using Linux, please, make sure to install microsoft fonts. <br />
-          In Ubuntu/Debian, the package you'll need is <i>ttf-mscorefonts-installer</i>
-        </p>
+        <div class="column">
+          <p>
+            This tool creates similar versions of the supplied text replacing
+            some characters with others that are much alike. The goal here
+            is to show that the font-family used in an application may
+            affect it's security.
+          </p>
+          <p>
+            If you're using Linux, please, make sure to install microsoft fonts.
+            In Ubuntu/Debian, the package you'll need is <i>ttf-mscorefonts-installer</i>
+          </p>
+          <p>
+            Supported chars: <span v-text='charsAsStr'></span>
+          </p>
+        </div>
       </div>
       <div class="row">
         <form class="ui form">
           <div class="field">
             <label>First Name</label>
-            <input v-model='message' name="first-name" placeholder="type some URI here" type="text">
+            <input v-model='message' name="first-name" placeholder="type some URI here" type="text" />
           </div>
         </form>
       </div>
@@ -57,21 +62,70 @@
 
   <script src="https://unpkg.com/vue"></script>
   <script>
+    // codes from python3 ord
     var chrMap = {
-      '0': ['O'],  // zero
-      '1': ['l', 'i'],  // one
-      '2': ['z', 'Z'],  // two
-      '8': ['B'],  // eight
-      'B': ['ß', '8'],
-      'i': ['l', '¡'],
-      'I': ['L', '¡'],
-      'l': ['1', 'i'],  // elle
-      'o': ['0', 'º', '°'],  // lower o
-      'O': ['0'],  // upper o
-      'p': ['þ'],
-      'x': ['×'],
-      'z': ['2'],
-      'Z': ['2']
+      '0': [
+        'O'  // 79
+      ],  // 48
+      '1': [
+        'l', // 108
+        'i'  // 105
+      ],  // 49
+      '2': [
+        'z',  // 122
+        'Z'  // 90
+      ],  // 50
+      '8': [
+        'B'  // 66
+      ],  // 56
+      'B': [
+        'ß',  // 223 
+        '8'  // 56
+      ],
+      'f': [
+        'ƒ'  // 402
+      ],  // 102
+      'i': [
+        '1',  // 49
+        'l',  // 108
+        '¡'  // 161
+      ],  // 105
+      'I': [
+        'L',  // 76
+        '¡'  // 161
+      ],  // 73
+      'l': [
+        '1',  // 49
+        'i'  // 105
+      ],  // 108
+      'o': [
+        '0',  // 48
+        '°',  // 176
+        'º',  // 186
+        'ð',  // 240
+        'ø'  // 248
+      ],  // 111
+      'O': [
+        '0'  // 48
+      ],  // 79
+      'p': [
+        'þ'  // 254
+      ],  // 112
+      't': [
+        '†'  // 8224
+      ],  // 116
+      'T': [
+        '†'  // 8224
+      ],  // 84
+      'x': [
+        '×'  // 215
+      ],  // 120
+      'z': [
+        '2'  // 50
+      ],  // 122
+      'Z': [
+        '2'  // 50
+      ]  // 90
     };
     var app = new Vue({
       el: '#app',
@@ -84,9 +138,16 @@
             'comic sans': '"Comic Sans MS", cursive, sans-serif',
             'arial': 'Arial, Helvetica, sans-serif',
             'georgia': 'Georgia, serif',
-            'times new roman': '"Times New Roman", Times, serif'
+            'times new roman': '"Times New Roman", Times, serif',
+            // semantic-ui font
+            'lato': 'Lato,"Helvetica Neue",Arial,Helvetica,sans-serif'
           },
           message: 'Type your message'
+        }
+      },
+      computed: {
+        charsAsStr: function () {
+          return Object.keys(chrMap).join(', ');
         }
       },
       methods: {
